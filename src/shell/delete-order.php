@@ -21,8 +21,10 @@ class Mage_Shell_DeleteOrder extends Mage_Shell_Abstract
 
         $order = $this->_getOrder();
 
-        if (!$order) {
+        if ($order === null) {
             echo "the order does not exists\n";
+        } elseif ($order === false) {
+            echo $this->usageHelp();
         } else {
             if ($this->_dryRun) {
                 echo "Dry Run\n\n";
@@ -92,6 +94,8 @@ info;
             $order = Mage::getModel('sales/order')->load($orderId);
         } elseif ($incrementId) {
             $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId);
+        } else {
+            return false;
         }
 
         return $order && $order->getId() ? $order : null;
